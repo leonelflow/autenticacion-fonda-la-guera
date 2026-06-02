@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { initializeApp } from 'firebase/app';
 import {
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
   getRedirectResult,
@@ -37,6 +38,7 @@ export class AuthService {
   async loginWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
+    await setPersistence(this.auth, browserSessionPersistence);
     await signInWithRedirect(this.auth, provider);
   }
 
