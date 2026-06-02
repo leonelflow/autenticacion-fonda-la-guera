@@ -1,6 +1,7 @@
-node_modules/
+﻿node_modules/
 dist/
 .env
 serviceAccountKey.json
+.angular/
 *.log
 .DS_Store
