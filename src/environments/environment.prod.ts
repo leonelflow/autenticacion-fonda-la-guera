@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-authDomain: 'autenticacion-fonda-la-guera.onrender.com',
+  apiUrl: 'https://autenticacion-fonda-la-guera.onrender.com',
   firebase: {
     apiKey: 'AIzaSyBXDRBDdUoJDh7yDnaP-TLrxwM2au77RHI',
-    authDomain: 'fonda-economica-la-guera.firebaseapp.com',
+    authDomain: 'autenticacion-fonda-la-guera.onrender.com',
     projectId: 'fonda-economica-la-guera',
     storageBucket: 'fonda-economica-la-guera.firebasestorage.app',
     messagingSenderId: '527569376126',
