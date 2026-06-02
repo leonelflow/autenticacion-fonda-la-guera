@@ -41,13 +41,21 @@ export class LoginComponent {
   }
 
   async loginWithGoogle(): Promise<void> {
-    this.message = 'Abriendo Google...';
+    this.message = '';
 
     try {
       await this.authService.loginWithGoogle();
       await this.router.navigateByUrl('/verificar-codigo');
     } catch (error: any) {
       console.error('Error con Google:', error);
+
+      if (
+        error?.code === 'auth/popup-closed-by-user' ||
+        error?.code === 'auth/cancelled-popup-request'
+      ) {
+        this.message = '';
+        return;
+      }
 
       if (error?.code) {
         this.message = `Error Firebase: ${error.code}`;

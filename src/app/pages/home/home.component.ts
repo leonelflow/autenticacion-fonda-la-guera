@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { OrderService } from '../../core/order.service';
 import { CartItem, MenuItem, SessionUser } from '../../core/models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ export class HomeComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly orderService = inject(OrderService);
   private readonly router = inject(Router);
+  private readonly api = environment.apiUrl;
 
   user: SessionUser | null = null;
   businessName = 'Fonda de Comida';
@@ -45,7 +47,7 @@ export class HomeComponent implements OnInit {
     this.loadCart();
 
     try {
-      const response = await fetch('/api/config');
+      const response = await fetch(`${this.api}/api/config`);
       const data = await response.json();
       this.businessName = data.businessName || this.businessName;
     } catch {
@@ -55,27 +57,22 @@ export class HomeComponent implements OnInit {
 
   addToCart(product: MenuItem): void {
     const existing = this.cart.find(item => item.id === product.id);
-
     if (existing) {
       existing.quantity += 1;
     } else {
       this.cart.push({ ...product, quantity: 1 });
     }
-
     this.saveCart();
   }
 
   changeQuantity(id: string, delta: number): void {
     const item = this.cart.find(product => product.id === id);
     if (!item) return;
-
     item.quantity += delta;
-
     if (item.quantity <= 0) {
       this.removeFromCart(id);
       return;
     }
-
     this.saveCart();
   }
 
@@ -90,17 +87,14 @@ export class HomeComponent implements OnInit {
 
   async submitOrder(): Promise<void> {
     this.message = '';
-
     if (!this.user) {
       await this.router.navigateByUrl('/login');
       return;
     }
-
     if (this.cart.length === 0) {
       this.message = 'Agrega productos antes de enviar el pedido.';
       return;
     }
-
     try {
       const response = await firstValueFrom(
         this.orderService.createOrder({
@@ -109,16 +103,9 @@ export class HomeComponent implements OnInit {
           total: this.total
         })
       );
-
       this.cart = [];
       this.saveCart();
-      this.orderForm = {
-        customerName: '',
-        phone: '',
-        address: '',
-        notes: ''
-      };
-
+      this.orderForm = { customerName: '', phone: '', address: '', notes: '' };
       this.message = `Pedido enviado correctamente. Total: ${response.total.toLocaleString('es-MX', {
         style: 'currency',
         currency: 'MXN'
