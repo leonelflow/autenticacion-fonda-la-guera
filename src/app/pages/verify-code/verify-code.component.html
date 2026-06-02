@@ -1,0 +1,33 @@
+﻿<main class="auth-page">
+  <section class="form-card">
+    <a routerLink="/login" class="brand">
+      <span class="logo">🍲</span>
+      <span>Fonda de Comida</span>
+    </a>
+
+    <h1>Verificación de acceso</h1>
+    <p class="muted">Ingresa el código que enviamos a tu correo.</p>
+
+    <form class="form-grid" (ngSubmit)="verify()">
+      <input
+        name="code"
+        [(ngModel)]="code"
+        type="text"
+        maxlength="6"
+        inputmode="numeric"
+        placeholder="Código de 6 dígitos"
+        required
+      >
+
+      <button class="btn btn-primary" type="submit">
+        Verificar código
+      </button>
+    </form>
+
+    <p class="message">{{ message }}</p>
+
+    <p>
+      <a routerLink="/login"><strong>Volver a iniciar sesión</strong></a>
+    </p>
+  </section>
+</main>

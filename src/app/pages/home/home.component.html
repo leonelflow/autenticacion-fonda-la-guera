@@ -1,0 +1,126 @@
+<header class="header">
+  <nav class="nav">
+<a routerLink="/inicio" class="brand">
+      <span class="logo">🍲</span>
+      <span>{{ businessName }}</span>
+    </a>
+
+    <div class="actions">
+      @if (user) {
+        <span>{{ user.email }}</span>
+        @if (user.isAdmin) {
+          <a class="btn btn-light" routerLink="/panel">Panel</a>
+        }
+        <button class="btn btn-outline" type="button" (click)="logout()">Salir</button>
+      } @else {
+        <a class="btn btn-outline" routerLink="/login">Iniciar sesión</a>
+        <a class="btn btn-primary" routerLink="/registro">Crear cuenta</a>
+      }
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-box">
+      <h1>Comida casera lista para ordenar</h1>
+      <p>Menú del día, guisados, aguas frescas y pedidos en línea para recoger o enviar a domicilio.</p>
+      <a href="#pedido" class="btn btn-primary">Hacer pedido</a>
+    </div>
+
+    <aside class="hero-card">
+      <h2>Horario</h2>
+      <p><strong>Lunes a sábado</strong><br>9:00 a.m. - 6:00 p.m.</p>
+      <p><strong>Servicio</strong><br>Pedidos para recoger y entrega local.</p>
+    </aside>
+  </section>
+
+  <section class="section layout" id="pedido">
+    <div>
+      <div class="section-title">
+        <h2>Menú</h2>
+        <p class="muted">Precios en pesos mexicanos</p>
+      </div>
+
+      <div class="grid">
+        @for (item of menu; track item.id) {
+          <article class="card">
+            <div class="food-image">{{ item.name.charAt(0) }}</div>
+            <div class="card-body">
+              <h3>{{ item.name }}</h3>
+              <p>{{ item.desc }}</p>
+              <div class="price-row">
+                <strong>{{ item.price | currency:'MXN':'symbol':'1.2-2':'es-MX' }}</strong>
+                <button class="btn btn-primary" type="button" (click)="addToCart(item)">Agregar</button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2>Tu pedido</h2>
+
+      @if (cart.length === 0) {
+        <p class="muted">Aún no has agregado productos.</p>
+      } @else {
+        @for (item of cart; track item.id) {
+          <div class="cart-item">
+            <div>
+              <strong>{{ item.name }}</strong>
+              <small>{{ item.price | currency:'MXN':'symbol':'1.2-2':'es-MX' }} c/u</small>
+            </div>
+
+            <div class="qty">
+              <button type="button" (click)="changeQuantity(item.id, -1)">−</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" (click)="changeQuantity(item.id, 1)">+</button>
+            </div>
+
+            <button class="remove" type="button" (click)="removeFromCart(item.id)">Eliminar</button>
+          </div>
+        }
+      }
+
+      <div class="total-row">
+        <h3>Total</h3>
+        <h3>{{ total | currency:'MXN':'symbol':'1.2-2':'es-MX' }}</h3>
+      </div>
+
+      <form class="form-grid" (ngSubmit)="submitOrder()" #formPedido="ngForm">
+        <input
+          name="customerName"
+          [(ngModel)]="orderForm.customerName"
+          type="text"
+          placeholder="Nombre del cliente"
+          required
+        >
+
+        <input
+          name="phone"
+          [(ngModel)]="orderForm.phone"
+          type="tel"
+          placeholder="Teléfono"
+          required
+        >
+
+        <input
+          name="address"
+          [(ngModel)]="orderForm.address"
+          type="text"
+          placeholder="Dirección o referencia"
+        >
+
+        <textarea
+          name="notes"
+          [(ngModel)]="orderForm.notes"
+          placeholder="Notas del pedido"
+        ></textarea>
+
+        <button class="btn btn-primary" type="submit">Enviar pedido</button>
+        <p class="message">{{ message }}</p>
+      </form>
+    </aside>
+  </section>
+</main>

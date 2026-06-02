@@ -1,0 +1,42 @@
+<main class="auth-page">
+  <section class="form-card">
+    <a routerLink="/" class="brand">
+      <span class="logo">🍲</span>
+      <span>Fonda de Comida</span>
+    </a>
+
+    <h1>Crear cuenta</h1>
+    <p class="muted">Regístrate para enviar pedidos.</p>
+
+    <form class="form-grid" (ngSubmit)="register()">
+      <input
+        name="name"
+        [(ngModel)]="name"
+        type="text"
+        placeholder="Nombre completo"
+      >
+
+      <input
+        name="email"
+        [(ngModel)]="email"
+        type="email"
+        placeholder="Correo electrónico"
+        required
+      >
+
+      <input
+        name="password"
+        [(ngModel)]="password"
+        type="password"
+        placeholder="Contraseña mínimo 6 caracteres"
+        minlength="6"
+        required
+      >
+
+      <button class="btn btn-primary" type="submit">Crear cuenta</button>
+    </form>
+
+    <p class="message">{{ message }}</p>
+    <p>¿Ya tienes cuenta? <a routerLink="/login"><strong>Iniciar sesión</strong></a></p>
+  </section>
+</main>

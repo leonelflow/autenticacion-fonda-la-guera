@@ -1,0 +1,75 @@
+<header class="header">
+  <nav class="nav">
+<a routerLink="/inicio" class="brand">
+      <span class="logo">🍲</span>
+      <span>Panel de Fonda</span>
+    </a>
+
+    <div class="actions">
+      @if (user) {
+        <span>{{ user.email }}</span>
+      }
+      <button class="btn btn-outline" type="button" (click)="logout()">Salir</button>
+    </div>
+  </nav>
+</header>
+
+<main class="section">
+  <div class="section-title">
+    <h1>Pedidos recibidos</h1>
+<a routerLink="/inicio" class="btn btn-light">Ver tienda</a>
+  </div>
+
+  <p class="message">{{ message }}</p>
+
+  @if (user?.isAdmin) {
+    @if (orders.length === 0) {
+      <p class="muted">Todavía no hay pedidos registrados.</p>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Pedido</th>
+              <th>Total</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (order of orders; track order.id) {
+              <tr>
+                <td>{{ formatDate(order.createdAt) }}</td>
+                <td>
+                  <strong>{{ order.customerName }}</strong><br>
+                  <small>{{ order.phone }}</small><br>
+                  <small>{{ order.address || 'Sin dirección' }}</small>
+                </td>
+                <td>
+                  @for (item of order.items; track item.id) {
+                    <div>{{ item.quantity }}× {{ item.name }}</div>
+                  }
+                  @if (order.notes) {
+                    <small>Nota: {{ order.notes }}</small>
+                  }
+                </td>
+                <td>
+                  {{ (order.calculatedTotal || order.total) | currency:'MXN':'symbol':'1.2-2':'es-MX' }}
+                </td>
+                <td>
+                  <select [value]="order.status" (change)="updateStatus(order, $event)">
+                    @for (status of statuses; track status) {
+                      <option [value]="status">{{ status }}</option>
+                    }
+                  </select>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</main>

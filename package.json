@@ -1,0 +1,42 @@
+{
+  "name": "fonda-angular-firebase-auth",
+  "version": "1.0.0",
+  "description": "Proyecto Angular para fonda de comida con Firebase Auth, cookies httpOnly y panel de pedidos.",
+  "scripts": {
+    "ng": "ng",
+    "start": "concurrently \"npm run api\" \"npm run web\"",
+    "web": "ng serve --proxy-config proxy.conf.json",
+    "api": "nodemon server/server.js",
+    "build": "ng build",
+    "serve:prod": "npm run build && NODE_ENV=production node server/server.js"
+  },
+  "dependencies": {
+    "@angular/animations": "^20.0.0",
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "firebase": "^12.0.0",
+    "firebase-admin": "^13.0.2",
+    "helmet": "^8.0.0",
+    "nodemailer": "^8.0.10",
+    "rxjs": "~7.8.2",
+    "tslib": "^2.8.1",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.0.0",
+    "@angular/cli": "^20.0.0",
+    "@angular/compiler-cli": "^20.0.0",
+    "@types/node": "^22.10.2",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "typescript": "~5.8.2"
+  }
+}

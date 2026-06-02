@@ -1,0 +1,46 @@
+<main class="auth-page">
+  <section class="form-card">
+    <a routerLink="/" class="brand">
+      <span class="logo">🍲</span>
+      <span>Fonda de Comida</span>
+    </a>
+
+    <h1>Iniciar sesión</h1>
+    <p class="muted">Accede para enviar pedidos o entrar al panel.</p>
+
+    <button class="btn btn-google" type="button" (click)="loginWithGoogle()">
+      Continuar con Google
+    </button>
+
+    <div class="separator">
+      <span>o inicia con correo</span>
+    </div>
+
+    <form class="form-grid" (ngSubmit)="login()">
+      <input
+        name="email"
+        [(ngModel)]="email"
+        type="email"
+        placeholder="Correo electrónico"
+        required
+      >
+
+      <input
+        name="password"
+        [(ngModel)]="password"
+        type="password"
+        placeholder="Contraseña"
+        required
+      >
+
+      <button class="btn btn-primary" type="submit">Entrar</button>
+    </form>
+
+    <p class="message">{{ message }}</p>
+
+    <p>
+      ¿No tienes cuenta?
+      <a routerLink="/registro"><strong>Crear cuenta</strong></a>
+    </p>
+  </section>
+</main>
