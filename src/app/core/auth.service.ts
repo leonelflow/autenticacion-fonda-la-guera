@@ -1,15 +1,16 @@
-﻿import { Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { initializeApp } from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  getRedirectResult,
   GoogleAuthProvider,
   inMemoryPersistence,
   setPersistence,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
   signOut,
   updateProfile
 } from 'firebase/auth';
@@ -21,9 +22,7 @@ import { SessionUser } from './models';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-
   private readonly api = environment.apiUrl;
-
   private readonly firebaseApp = initializeApp(environment.firebase);
   private readonly auth = getAuth(this.firebaseApp);
 
@@ -36,13 +35,19 @@ export class AuthService {
   }
 
   async loginWithGoogle(): Promise<void> {
-    await setPersistence(this.auth, inMemoryPersistence);
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    const credential = await signInWithPopup(this.auth, provider);
-    const idToken = await credential.user.getIdToken();
-    await this.startTwoFactor(idToken);
-    await signOut(this.auth);
+    await signInWithRedirect(this.auth, provider);
+  }
+
+  async handleGoogleRedirect(): Promise<void> {
+    const result = await getRedirectResult(this.auth);
+    if (result?.user) {
+      const idToken = await result.user.getIdToken();
+      await this.startTwoFactor(idToken);
+      await signOut(this.auth);
+      await this.router.navigateByUrl('/verificar-codigo');
+    }
   }
 
   async register(name: string, email: string, password: string): Promise<void> {
